@@ -6,7 +6,7 @@ import { findPasskeys } from "@/server/passkey/find-passkeys";
 import { updatePasskey } from "@/server/passkey/update-passkey";
 import type { RegistrationResponseJSON } from "@simplewebauthn/types";
 import { TRPCError } from "@trpc/server";
-import cookie from "cookie";
+import { parse as parseCookieHeader } from "cookie";
 
 import { createPasskeySigninOptions } from "@/server/passkey/create-signin-options";
 import { createTRPCRouter, withAuth, withoutAuth } from "@/trpc/api/trpc";
@@ -96,7 +96,10 @@ export const passkeyRouter = createTRPCRouter({
 
   createSigninOptions: withoutAuth.mutation(async ({ ctx }) => {
     const cookies = ctx.headers.get("cookie");
-    const parsedCookies = cookie.parse(cookies || "") as Record<string, string>;
+    const parsedCookies = parseCookieHeader(cookies || "") as Record<
+      string,
+      string
+    >;
     const sessionIdToken =
       parsedCookies["__Host-next-auth.csrf-token"] ||
       parsedCookies["next-auth.csrf-token"];

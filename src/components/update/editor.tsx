@@ -16,7 +16,7 @@ import { Fragment, useState } from "react";
 import { toast } from "sonner";
 
 import "@/styles/editor.css";
-import { BlockNoteView, useCreateBlockNote } from "@blocknote/react";
+import { BlockNoteViewRaw, useCreateBlockNote } from "@blocknote/react";
 import "@blocknote/react/style.css";
 import { UpdateStatusEnum } from "@/prisma/enums";
 import { pushModal } from "../modals";
@@ -375,7 +375,7 @@ const UpdatesEditor = ({
       </form>
 
       <Card className="mx-auto mt-3 min-h-[80vh] w-[28rem] sm:w-[38rem] md:w-full	">
-        <BlockNoteView
+        <BlockNoteViewRaw
           className="py-5"
           editor={editor}
           theme="light"
