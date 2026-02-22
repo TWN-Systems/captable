@@ -177,9 +177,7 @@ const enforceAuthMiddleware = t.middleware(({ ctx: ctx_, next }) => {
   });
 });
 
-const pipedSentryMiddleware = sentryMiddleware.unstable_pipe(
-  enforceAuthMiddleware,
-);
+const pipedSentryMiddleware = sentryMiddleware.pipe(enforceAuthMiddleware);
 
 const authMiddleware = isSentryEnabled
   ? pipedSentryMiddleware
@@ -205,7 +203,7 @@ export const withoutAuth = t.procedure;
 export const withAuth = t.procedure.use(authMiddleware);
 
 export const withAccessControl = t.procedure.use(
-  authMiddleware.unstable_pipe(async ({ ctx: ctx_, next, meta }) => {
+  authMiddleware.pipe(async ({ ctx: ctx_, next, meta }) => {
     const ctx = await withAccessControlTrpcContext({ ...ctx_, meta });
 
     return next({
