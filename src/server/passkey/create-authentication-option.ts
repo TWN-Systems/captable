@@ -1,9 +1,9 @@
-import { getAuthenticatorOptions } from "@/lib/authenticator";
-import { db } from "@/server/db";
-import type { PasskeyAudit } from "@/trpc/routers/passkey-router/schema";
 import type { Passkey } from "@prisma/client";
 import { generateAuthenticationOptions } from "@simplewebauthn/server";
 import type { AuthenticatorTransportFuture } from "@simplewebauthn/types";
+import { getAuthenticatorOptions } from "@/lib/authenticator";
+import { db } from "@/server/db";
+import type { PasskeyAudit } from "@/trpc/routers/passkey-router/schema";
 import { Audit } from "../audit";
 
 type CreatePasskeyAuthenticationOptions = {
@@ -54,7 +54,9 @@ export const createPasskeyAuthenticationOptions = async ({
     allowCredentials: preferredPasskey
       ? [
           {
-            id: preferredPasskey.credentialId.toString("utf8"),
+            id: Buffer.from(preferredPasskey.credentialId).toString(
+              "base64url",
+            ),
             // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
             transports:
               preferredPasskey.transports as AuthenticatorTransportFuture[],
@@ -85,7 +87,7 @@ export const createPasskeyAuthenticationOptions = async ({
     data: {
       userId,
       token: options.challenge,
-      expires: new Date(new Date().getTime() + 2 * 60000), // 2 min expiry
+      expires: new Date(Date.now() + 2 * 60000), // 2 min expiry
       identifier: "PASSKEY_CHALLENGE",
     },
   });

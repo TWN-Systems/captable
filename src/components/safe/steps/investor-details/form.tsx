@@ -1,5 +1,12 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RiAddCircleLine } from "@remixicon/react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useForm, useFormContext, useWatch } from "react-hook-form";
+import { NumericFormat } from "react-number-format";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { LinearCombobox } from "@/components/ui/combobox";
 import {
@@ -13,29 +20,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectItemStyle,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   StepperModalFooter,
   StepperPrev,
   useStepper,
 } from "@/components/ui/stepper";
 import { useFormValueUpdater } from "@/providers/form-value-provider";
 import type { RouterOutputs } from "@/trpc/shared";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as SelectPrimitive from "@radix-ui/react-select";
-import { RiAddCircleLine } from "@remixicon/react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useForm, useFormContext, useWatch } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
-import { z } from "zod";
 
 const formSchema = z.object({
   capital: z.coerce.number(),

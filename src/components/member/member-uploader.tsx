@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { parseInviteMembersCSV } from "@/lib/invite-team-members-csv-parser";
-import { api } from "@/trpc/react";
-import type { TypeZodInviteMemberArrayMutationSchema } from "@/trpc/routers/member-router/schema";
 import { RiUploadLine } from "@remixicon/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { parseInviteMembersCSV } from "@/lib/invite-team-members-csv-parser";
+import { api } from "@/trpc/react";
+import type { TypeZodInviteMemberArrayMutationSchema } from "@/trpc/routers/member-router/schema";
 
 type TeamMemberUploaderType = {
   setOpen: (val: boolean) => void;
@@ -76,7 +76,8 @@ const TeamMemberUploader = ({ setOpen }: TeamMemberUploaderType) => {
         , complete and upload it to import your existing or new team members.
       </div>
 
-      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: click only interaction */}
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: file upload trigger div */}
       <div
         className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-gray-300"
         onClick={() => fileInputRef.current?.click()}

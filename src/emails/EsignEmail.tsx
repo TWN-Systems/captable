@@ -1,4 +1,3 @@
-import type { TESignNotificationEmailJobInput } from "@/jobs/esign-email";
 import {
   Body,
   Button,
@@ -15,6 +14,7 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
+import type { TESignNotificationEmailJobInput } from "@/jobs/esign-email";
 import {
   ArrowRight,
   SignatureIcon,
@@ -56,19 +56,15 @@ const EsignEmail = ({
               Hello {recipient?.name},
             </Text>
             {message ? (
-              <>
-                <Text className="text-[14px] leading-[24px] text-black">
-                  {message}
-                </Text>
-              </>
+              <Text className="text-[14px] leading-[24px] text-black">
+                {message}
+              </Text>
             ) : (
-              <>
-                <Text className="text-[14px] leading-[24px] text-black">
-                  <strong>{sender?.name}</strong> from{" "}
-                  <strong>{company?.name}</strong> has sent you{" "}
-                  <strong>{`"${documentName}"`}</strong>
-                </Text>
-              </>
+              <Text className="text-[14px] leading-[24px] text-black">
+                <strong>{sender?.name}</strong> from{" "}
+                <strong>{company?.name}</strong> has sent you{" "}
+                <strong>{`"${documentName}"`}</strong>
+              </Text>
             )}
             <Section className="max-w-[435px]">
               <Row className="gap-x-6">

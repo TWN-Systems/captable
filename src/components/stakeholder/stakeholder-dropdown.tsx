@@ -1,5 +1,6 @@
 "use client";
 
+import { RiAccountCircleFill, RiAddFill, RiGroup2Fill } from "@remixicon/react";
 import Tldr from "@/components/common/tldr";
 import { pushModal } from "@/components/modals";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { RiAccountCircleFill, RiAddFill, RiGroup2Fill } from "@remixicon/react";
 
 export default function StakeholderDropdown() {
   return (
@@ -42,10 +42,8 @@ export default function StakeholderDropdown() {
                 });
               }}
             >
-              <>
-                <RiAccountCircleFill className="mr-2 h-4 w-4" />
-                Add one stakeholder
-              </>
+              <RiAccountCircleFill className="mr-2 h-4 w-4" />
+              Add one stakeholder
             </Button>
           </li>
 
@@ -70,10 +68,8 @@ export default function StakeholderDropdown() {
                 });
               }}
             >
-              <>
-                <RiGroup2Fill className="mr-2 h-4 w-4" />
-                Import multiple stakeholders
-              </>
+              <RiGroup2Fill className="mr-2 h-4 w-4" />
+              Import multiple stakeholders
             </Button>
           </li>
         </ul>

@@ -1,25 +1,26 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { api } from "@/trpc/react";
 import { RiMailLine } from "@remixicon/react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { api } from "@/trpc/react";
 
 const CheckEmailComponent = () => {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
-  const { mutateAsync, isLoading } = api.auth.resendEmail.useMutation({
-    onSuccess: () => {
-      toast.success("🎉 Email successfully re-sent.");
-    },
-    onError: () => {
-      toast.error(
-        "Uh oh! Something went wrong, please try again or contact support.",
-      );
-    },
-  });
+  const { mutateAsync, isPending: isLoading } =
+    api.auth.resendEmail.useMutation({
+      onSuccess: () => {
+        toast.success("🎉 Email successfully re-sent.");
+      },
+      onError: () => {
+        toast.error(
+          "Uh oh! Something went wrong, please try again or contact support.",
+        );
+      },
+    });
 
   async function Resend() {
     try {

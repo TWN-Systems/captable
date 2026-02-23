@@ -1,24 +1,26 @@
 "use server";
 
-import { dayjsExt } from "@/common/dayjs";
-import { SharePageLayout } from "@/components/share/page-layout";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import UpdateRenderer from "@/components/update/renderer";
-import { type JWTVerifyResult, decode } from "@/lib/jwt";
-import { UpdateStatusEnum } from "@/prisma/enums";
-import { db } from "@/server/db";
 import { render } from "@react-email/components";
 import { RiLock2Line } from "@remixicon/react";
 import { notFound } from "next/navigation";
 import { Fragment } from "react";
+import { dayjsExt } from "@/common/dayjs";
+import { SharePageLayout } from "@/components/share/page-layout";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import UpdateRenderer from "@/components/update/renderer";
+import { decode, type JWTVerifyResult } from "@/lib/jwt";
+import { UpdateStatusEnum } from "@/prisma/enums";
+import { db } from "@/server/db";
 
 const PublicUpdatePage = async ({
-  params: { publicId },
-  searchParams: { token },
+  params,
+  searchParams,
 }: {
-  params: { publicId: string };
-  searchParams: { token: string };
+  params: Promise<{ publicId: string }>;
+  searchParams: Promise<{ token: string }>;
 }) => {
+  const { publicId } = await params;
+  const { token } = await searchParams;
   let decodedToken: JWTVerifyResult | null = null;
 
   try {
@@ -120,26 +122,24 @@ const PublicUpdatePage = async ({
         </Fragment>
       }
     >
-      <Fragment>
-        <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10 rounded-full">
-            <AvatarImage src={author.user.image || "/placeholders/user.svg"} />
-          </Avatar>
+      <div className="flex items-center gap-3">
+        <Avatar className="h-10 w-10 rounded-full">
+          <AvatarImage src={author.user.image || "/placeholders/user.svg"} />
+        </Avatar>
 
-          <div>
-            <p className="text-lg font-semibold">{author.user.name}</p>
-            <p className="text-sm text-muted-foreground">{author.title}</p>
-          </div>
+        <div>
+          <p className="text-lg font-semibold">{author.user.name}</p>
+          <p className="text-sm text-muted-foreground">{author.title}</p>
         </div>
+      </div>
 
-        <div className="mt-5">
-          <article
-            className="prose"
-            //biome-ignore lint/security/noDangerouslySetInnerHtml: allow dangerouslySetInnerHtml
-            dangerouslySetInnerHTML={{ __html: html }}
-          />
-        </div>
-      </Fragment>
+      <div className="mt-5">
+        <article
+          className="prose"
+          //biome-ignore lint/security/noDangerouslySetInnerHtml: allow dangerouslySetInnerHtml
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      </div>
     </SharePageLayout>
   );
 };

@@ -1,3 +1,4 @@
+import { RiCheckFill } from "@remixicon/react";
 import { PdfCanvas } from "@/components/template/pdf-canvas";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -6,7 +7,6 @@ import { serverAccessControl } from "@/lib/rbac/access-control";
 import type { TemplateStatus } from "@/prisma/enums";
 import { TemplateSigningFieldProvider } from "@/providers/template-signing-field-provider";
 import { api } from "@/trpc/server";
-import { RiCheckFill } from "@remixicon/react";
 
 type BadgeVariant =
   | "warning"
@@ -23,20 +23,21 @@ const variantMap: Record<TemplateStatus, BadgeVariant> = {
 };
 
 export default async function TemplateDetailViewPage({
-  params: { templatePublicId },
+  params,
 }: {
-  params: { templatePublicId: string };
+  params: Promise<{ templatePublicId: string }>;
 }) {
+  const { templatePublicId } = await params;
   const { allow } = await serverAccessControl();
 
   const [{ name, status, url, fields }, auditsData] = await Promise.all([
-    api.template.get.query({
+    api.template.get({
       publicId: templatePublicId,
       isDraftOnly: false,
     }),
 
     allow(
-      api.audit.allEsignAudits.query({
+      api.audit.allEsignAudits({
         templatePublicId: templatePublicId,
       }),
       ["audits", "read"],

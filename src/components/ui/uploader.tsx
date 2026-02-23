@@ -1,7 +1,5 @@
 "use client";
 
-import { uploadFile } from "@/common/uploads";
-import { api } from "@/trpc/react";
 import type React from "react";
 import { useCallback, useState } from "react";
 import {
@@ -10,11 +8,12 @@ import {
   useDropzone,
 } from "react-dropzone";
 import { toast } from "sonner";
-import { Button } from "./button";
-
+import { uploadFile } from "@/common/uploads";
 import type { TagType } from "@/lib/tags";
 import type { TypeKeyPrefixes } from "@/server/file-uploads";
+import { api } from "@/trpc/react";
 import type { RouterOutputs } from "@/trpc/shared";
+import { Button } from "./button";
 
 export type UploadReturn = RouterOutputs["bucket"]["create"];
 
@@ -60,7 +59,7 @@ export function Uploader({
   const [uploading, setUploading] = useState(false);
   const { mutateAsync } = api.bucket.create.useMutation();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional dependency list
   const onDrop = useCallback(async (acceptedFiles: FileWithPath[]) => {
     try {
       if (!multiple && acceptedFiles.length > 1) {
@@ -91,7 +90,7 @@ export function Uploader({
           });
 
           if (onSuccess) {
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            // biome-ignore lint/suspicious/noExplicitAny: required for type compatibility
             await onSuccess(data as any);
           }
 
@@ -99,7 +98,7 @@ export function Uploader({
         }
       } else {
         if (onSuccess) {
-          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          // biome-ignore lint/suspicious/noExplicitAny: required for type compatibility
           await onSuccess(acceptedFiles as any);
         }
         toast.success("🎉 Successfully uploaded");

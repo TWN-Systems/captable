@@ -5,10 +5,7 @@ export const DocumentShareMutationSchema = z.object({
   link: z.string().min(1, {
     message: "Link is required",
   }),
-  linkExpiresAt: z.coerce.date({
-    required_error: "Link expiry date is required",
-    invalid_type_error: "This is not a valid date",
-  }),
+  linkExpiresAt: z.coerce.date({ message: "Link expiry date is required" }),
   recipients: z.string().optional(),
   emailProtected: z.boolean().default(true),
   documentId: z.string().min(1, {

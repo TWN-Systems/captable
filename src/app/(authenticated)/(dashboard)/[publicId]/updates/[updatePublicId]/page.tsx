@@ -1,6 +1,6 @@
 "use server";
-import { db } from "@/server/db";
 import dynamic from "next/dynamic";
+import { db } from "@/server/db";
 
 const Editor = dynamic(
   () => import("../../../../../../components/update/editor"),
@@ -14,10 +14,11 @@ const getUpdate = async (publicId: string) => {
 };
 
 const UpdatePage = async ({
-  params: { publicId, updatePublicId },
+  params,
 }: {
-  params: { publicId: string; updatePublicId: string };
+  params: Promise<{ publicId: string; updatePublicId: string }>;
 }) => {
+  const { publicId, updatePublicId } = await params;
   if (updatePublicId === "new") {
     return <Editor companyPublicId={publicId} mode="new" />;
   }

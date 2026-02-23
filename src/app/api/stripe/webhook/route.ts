@@ -1,3 +1,4 @@
+import type Stripe from "stripe";
 import { env } from "@/env";
 import {
   deletePriceRecord,
@@ -7,7 +8,6 @@ import {
   upsertPriceRecord,
   upsertProductRecord,
 } from "@/server/stripe";
-import type Stripe from "stripe";
 
 const relevantEvents = new Set([
   "product.created",
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       return new Response("Webhook secret not found.", { status: 400 });
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
     console.log(`🔔  Webhook received: ${event.type}`);
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: required for type compatibility
   } catch (err: any) {
     console.log(`❌ Error message: ${err.message}`);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });

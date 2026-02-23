@@ -1,14 +1,14 @@
+import { z } from "zod";
+
+import { dayjsExt } from "@/common/dayjs";
+import { EsignAudit } from "@/server/audit";
+import { db } from "@/server/db";
 import {
   type EsignGetTemplateType,
   generateEsignPdf,
   getEsignAudits,
   uploadEsignDocuments,
 } from "@/server/esign";
-
-import { dayjsExt } from "@/common/dayjs";
-import { EsignAudit } from "@/server/audit";
-import { db } from "@/server/db";
-import { z } from "zod";
 import { defineJob, defineWorker, defineWorkerConfig } from "../lib/queue";
 import {
   Schema as EsignCompleteSchema,
@@ -20,7 +20,7 @@ const fields = z.array(z.any()) as z.ZodType<EsignGetTemplateType["fields"]>;
 const schema = z
   .object({
     fields,
-    data: z.record(z.string()),
+    data: z.record(z.string(), z.string()),
     bucketKey: z.string(),
   })
   .merge(EsignCompleteSchema.omit({ bucketData: true }));

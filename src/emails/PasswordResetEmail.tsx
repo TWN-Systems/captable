@@ -12,7 +12,6 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
-import * as React from "react";
 import { constants } from "../lib/constants";
 
 interface PasswordResetEmailProps {

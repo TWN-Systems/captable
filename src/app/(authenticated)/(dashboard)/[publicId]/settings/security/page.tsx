@@ -1,7 +1,6 @@
+import type { Metadata } from "next";
 import { SecurityList } from "@/components/security/SecurityList";
 import { SettingsHeader } from "@/components/security/SettingHeader";
-import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Security",
@@ -28,7 +27,7 @@ const SecurityLists = [
   },
 ];
 
-export default async function SecurityPage() {
+export default function SecurityPage() {
   return (
     <>
       <SettingsHeader

@@ -1,8 +1,8 @@
+import type { Metadata } from "next";
 import { CompanyForm } from "@/components/onboarding/company-form";
 import { UnAuthorizedState } from "@/components/ui/un-authorized-state";
 import { serverAccessControl } from "@/lib/rbac/access-control";
 import { api } from "@/trpc/server";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Company",
@@ -10,10 +10,7 @@ export const metadata: Metadata = {
 
 const CompanySettingsPage = async () => {
   const { allow } = await serverAccessControl();
-  const data = await allow(api.company.getCompany.query(), [
-    "company",
-    "update",
-  ]);
+  const data = await allow(api.company.getCompany(), ["company", "update"]);
 
   if (!data?.company) {
     return <UnAuthorizedState />;

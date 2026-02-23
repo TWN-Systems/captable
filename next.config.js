@@ -39,16 +39,14 @@ const nextConfig = {
 
     return config;
   },
-  experimental: {
-    instrumentationHook: true,
-    serverComponentsExternalPackages: [
-      "pino",
-      "pino-pretty",
-      "pdf-lib",
-      "@aws-sdk/s3-request-presigner",
-      "@react-pdf/renderer",
-    ],
-  },
+  serverExternalPackages: [
+    "pino",
+    "pino-pretty",
+    "pdf-lib",
+    "@aws-sdk/s3-request-presigner",
+    "@react-pdf/renderer",
+  ],
+  experimental: {},
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -66,7 +64,7 @@ export default hasSentry
       project: process.env.SENTRY_PROJECT,
       silent: true,
       widenClientFileUpload: true,
-      hideSourceMaps: true,
+      sourcemaps: { disable: true },
       disableLogger: true,
     })
   : bundleAnalyzer(nextConfig);

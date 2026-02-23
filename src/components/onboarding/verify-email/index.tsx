@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { api } from "@/trpc/react";
 import {
   RiArrowRightLine,
   RiMailCheckLine,
@@ -9,6 +7,8 @@ import {
 } from "@remixicon/react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { api } from "@/trpc/react";
 
 const VerifyEmail = ({ token }: { token: string }) => {
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ const VerifyEmail = ({ token }: { token: string }) => {
   const [success, setSuccess] = useState<string | undefined>("");
 
   const { mutateAsync } = api.auth.verifyEmail.useMutation({
-    onSuccess: async ({ message }) => {
+    onSuccess: ({ message }) => {
       setLoading(false);
       setSuccess(message);
     },
@@ -42,7 +42,7 @@ const VerifyEmail = ({ token }: { token: string }) => {
       setLoading(false);
       setError("Something went wrong! Please try again.");
     }
-  }, [token, success, error]);
+  }, [token, success, error, mutateAsync]);
 
   useEffect(() => {
     void onSubmit();

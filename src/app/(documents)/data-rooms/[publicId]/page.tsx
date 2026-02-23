@@ -1,28 +1,31 @@
 "use server";
 
-import DataRoomFileExplorer from "@/components/documents/data-room/explorer";
-import { SharePageLayout } from "@/components/share/page-layout";
-import { type JWTVerifyResult, decode } from "@/lib/jwt";
-import { db } from "@/server/db";
 import { RiFolder3Fill as FolderIcon } from "@remixicon/react";
 import { notFound } from "next/navigation";
+import DataRoomFileExplorer from "@/components/documents/data-room/explorer";
+import { SharePageLayout } from "@/components/share/page-layout";
+import { decode, type JWTVerifyResult } from "@/lib/jwt";
+import { db } from "@/server/db";
 
 const DataRoomPage = async ({
-  params: { publicId },
-  searchParams: { token },
+  params,
+  searchParams,
 }: {
-  params: { publicId: string };
-  searchParams: { token: string };
+  params: Promise<{ publicId: string }>;
+  searchParams: Promise<{ token: string }>;
 }) => {
+  const { publicId } = await params;
+  const { token } = await searchParams;
   let decodedToken: JWTVerifyResult | null = null;
 
   try {
     decodedToken = await decode(token);
-  } catch (error) {
+  } catch (_error) {
     return notFound();
   }
 
-  const { companyId, dataRoomId, recipientId } = decodedToken?.payload;
+  if (!decodedToken) return notFound();
+  const { companyId, dataRoomId, recipientId } = decodedToken.payload;
   if (!companyId || !recipientId || !dataRoomId) {
     return notFound();
   }

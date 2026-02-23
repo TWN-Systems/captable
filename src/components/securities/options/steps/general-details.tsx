@@ -1,5 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { NumericFormat } from "react-number-format";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { LinearCombobox } from "@/components/ui/combobox";
 import {
@@ -12,13 +16,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   StepperModalFooter,
   StepperPrev,
   useStepper,
@@ -26,10 +23,6 @@ import {
 import { toTitleCase } from "@/lib/string";
 import { OptionStatusEnum, OptionTypeEnum } from "@/prisma/enums";
 import { useStockOptionFormValues } from "@/providers/stock-option-form-provider";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
-import { z } from "zod";
 
 const STATUSES = Object.values(OptionStatusEnum).map((val) => ({
   label: toTitleCase(val),

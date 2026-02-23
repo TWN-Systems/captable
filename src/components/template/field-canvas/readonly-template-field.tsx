@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import { useFormContext, useWatch } from "react-hook-form";
+import type { TemplateSigningFieldForm } from "@/providers/template-signing-field-provider";
 import {
   ReadOnlyTemplateFieldContainer,
   type ReadOnlyTemplateFieldContainerProps,
 } from "./template-field-container";
-
-import { type TemplateSigningFieldForm } from "@/providers/template-signing-field-provider";
 
 type ReadOnlyTemplateFieldProps = Omit<
   ReadOnlyTemplateFieldContainerProps,
@@ -44,6 +43,7 @@ export const ReadOnlyTemplateField = ({
     <ReadOnlyTemplateFieldContainer {...rest} color={color}>
       {type === "SIGNATURE" ? (
         prefilledValue || value !== "" ? (
+          // biome-ignore lint/performance/noImgElement: signature preview requires img
           <img
             src={prefilledValue ?? value}
             alt="signature"

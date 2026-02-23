@@ -1,11 +1,9 @@
+import { RiPieChartFill } from "@remixicon/react";
+import type { Metadata } from "next";
 import EmptyState from "@/components/common/empty-state";
-import { ShareModal } from "@/components/securities/shares/share-modal";
 import ShareTable from "@/components/securities/shares/share-table";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { api } from "@/trpc/server";
-import { RiAddFill, RiPieChartFill } from "@remixicon/react";
-import type { Metadata } from "next";
 import { IssueShareButton } from "./issue-share-button";
 
 export const metadata: Metadata = {
@@ -13,9 +11,9 @@ export const metadata: Metadata = {
 };
 
 const SharesPage = async () => {
-  const shares = await api.securities.getShares.query();
-  const stakeholders = await api.stakeholder.getStakeholders.query();
-  const shareClasses = await api.shareClass.get.query();
+  const shares = await api.securities.getShares();
+  const stakeholders = await api.stakeholder.getStakeholders();
+  const shareClasses = await api.shareClass.get();
 
   if (shares?.data?.length === 0) {
     return (

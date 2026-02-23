@@ -1,4 +1,7 @@
 "use client";
+import { RiCheckFill as CheckIcon } from "@remixicon/react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -15,9 +18,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { RiCheckFill as CheckIcon } from "@remixicon/react";
-import type React from "react";
-import { useEffect, useRef, useState } from "react";
 
 export type ComboBoxOption = {
   value: string;
@@ -69,7 +69,7 @@ export const LinearCombobox = ({
               {selectedOption.label}
             </>
           ) : defaultOption ? (
-            <>{defaultOption.label}</>
+            defaultOption.label
           ) : (
             <>Select an Option</>
           )}
@@ -86,8 +86,8 @@ export const LinearCombobox = ({
           <CommandInput
             value={searchValue}
             onValueChange={(value) => {
-              if (Number.parseInt(value) < options.length) {
-                const possibleOption = options[Number.parseInt(value)];
+              if (Number.parseInt(value, 10) < options.length) {
+                const possibleOption = options[Number.parseInt(value, 10)];
                 if (possibleOption) {
                   setSelectedOption(possibleOption);
                   setOpenPopover(false);

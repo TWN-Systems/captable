@@ -1,7 +1,6 @@
-import type { Config } from "tailwindcss";
-
-const config = {
-  darkMode: ["class"],
+// biome-ignore lint/suspicious/noExplicitAny: tailwind v4 config type compatibility
+const config: any = {
+  darkMode: "class",
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -122,7 +121,7 @@ const config = {
     },
   ],
 
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-} satisfies Config;
+  plugins: [],
+};
 
 export default config;

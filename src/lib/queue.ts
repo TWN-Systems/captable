@@ -1,8 +1,8 @@
+import PgBoss from "pg-boss";
+import type { z } from "zod";
 import type { JOB_TYPES } from "@/constants/job";
 import { logger } from "@/lib/logger";
 import { singleton } from "@/lib/singleton";
-import PgBoss from "pg-boss";
-import type { z } from "zod";
 
 const CONNECTION_URL =
   process.env.QUEUE_DATABASE_URL ?? (process.env.DATABASE_URL as string);
@@ -33,7 +33,7 @@ export type JobType = {
 
 interface WorkerFactory {
   name: JobType;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: required for type compatibility
   handler: PgBoss.WorkHandler<any>;
 }
 
@@ -44,10 +44,13 @@ function createQueue() {
     log.info(logPrefix("Starting queue manager"));
 
     queue.on("error", (error) => {
-      log.error(logPrefix("error"), {
-        type: "queue",
-        error,
-      });
+      log.error(
+        {
+          type: "queue",
+          error,
+        },
+        logPrefix("error"),
+      );
     });
 
     await queue.start();
@@ -111,7 +114,7 @@ interface defineWorkerConfigOptions<T> {
   name: JobType;
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: required for type compatibility
 function defineWorkerConfig<T extends z.ZodObject<any>>(
   opts: defineWorkerConfigOptions<T>,
 ) {

@@ -1,16 +1,17 @@
 "use server";
 
-import { api } from "@/trpc/server";
 import type { Bucket, DataRoom } from "@prisma/client";
 import { notFound } from "next/navigation";
+import { api } from "@/trpc/server";
 import DataRoomFiles from "../components/data-room-files";
 
 const DataRoomSettinsPage = async ({
-  params: { publicId, dataRoomPublicId },
+  params,
 }: {
-  params: { publicId: string; dataRoomPublicId: string };
+  params: Promise<{ publicId: string; dataRoomPublicId: string }>;
 }) => {
-  const { dataRoom, documents } = await api.dataRoom.getDataRoom.query({
+  const { publicId, dataRoomPublicId } = await params;
+  const { dataRoom, documents } = await api.dataRoom.getDataRoom({
     dataRoomPublicId,
     include: {
       company: false,
@@ -18,7 +19,7 @@ const DataRoomSettinsPage = async ({
       documents: true,
     },
   });
-  const contacts = await api.common.getContacts.query();
+  const contacts = await api.common.getContacts();
 
   if (!dataRoom) {
     return notFound();

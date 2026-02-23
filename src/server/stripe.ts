@@ -1,7 +1,7 @@
+import Stripe from "stripe";
 import { env } from "@/env";
 import { invariant } from "@/lib/error";
-import Stripe from "stripe";
-import { type TPrismaOrTransaction, db } from "./db";
+import { db, type TPrismaOrTransaction } from "./db";
 
 const toDateTime = (secs: number) => {
   const t = new Date(+0); // Unix epoch start.
@@ -10,8 +10,7 @@ const toDateTime = (secs: number) => {
 };
 
 export const stripe = new Stripe(env.STRIPE_API_KEY ?? "", {
-  typescript: true,
-  apiVersion: "2024-04-10",
+  apiVersion: "2026-01-28.clover",
 });
 
 export { Stripe };
@@ -77,7 +76,7 @@ export async function upsertPriceRecord(price: Stripe.Price) {
 export const manageSubscriptionStatusChange = async (
   subscriptionId: string,
   customerId: string,
-  createAction = false,
+  _createAction = false,
 ) => {
   const customer = await db.billingCustomer.findFirst({
     where: { id: customerId },
@@ -85,9 +84,10 @@ export const manageSubscriptionStatusChange = async (
 
   invariant(customer?.id, "Customer lookup failed");
 
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const subscription = (await stripe.subscriptions.retrieve(subscriptionId, {
     expand: ["default_payment_method"],
-  });
+  })) as any;
 
   const item = subscription.items.data[0];
 

@@ -1,11 +1,10 @@
 "use client";
 
-import { pushModal } from "@/components/modals";
-import { Button } from "@/components/ui/button";
-import { EquityPlanMutationType } from "@/trpc/routers/equity-plan/schema";
-import type { ShareClassMutationType } from "@/trpc/routers/share-class/schema";
 import { RiAddFill } from "@remixicon/react";
 import type React from "react";
+import { pushModal } from "@/components/modals";
+import { Button } from "@/components/ui/button";
+import type { ShareClassMutationType } from "@/trpc/routers/share-class/schema";
 
 type CreateEquityPlanButtonProps = {
   type: "create" | "update";

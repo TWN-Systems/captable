@@ -1,10 +1,10 @@
+import { generateRegistrationOptions } from "@simplewebauthn/server";
+import { isoUint8Array } from "@simplewebauthn/server/helpers";
+import type { AuthenticatorTransportFuture } from "@simplewebauthn/types";
 import { PASSKEY_TIMEOUT } from "@/constants/passkey";
 import { getAuthenticatorOptions } from "@/lib/authenticator";
 import { db } from "@/server/db";
 import type { PasskeyAudit } from "@/trpc/routers/passkey-router/schema";
-import { generateRegistrationOptions } from "@simplewebauthn/server";
-import { isoUint8Array } from "@simplewebauthn/server/helpers";
-import type { AuthenticatorTransportFuture } from "@simplewebauthn/types";
 import { Audit } from "../audit";
 
 type CreatePasskeyRegistrationOptions = {
@@ -38,7 +38,7 @@ export const createPasskeyRegistrationOptions = async ({
     timeout: PASSKEY_TIMEOUT,
     attestationType: "none",
     excludeCredentials: passkeys.map((passkey) => ({
-      id: passkey.credentialId.toString("utf8"),
+      id: Buffer.from(passkey.credentialId).toString("base64url"),
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       transports: passkey.transports as AuthenticatorTransportFuture[],
     })),
@@ -66,7 +66,7 @@ export const createPasskeyRegistrationOptions = async ({
     data: {
       userId,
       token: options.challenge,
-      expires: new Date(new Date().getTime() + 2 * 60000), // 2 min expiry
+      expires: new Date(Date.now() + 2 * 60000), // 2 min expiry
       identifier: "PASSKEY_CHALLENGE",
     },
   });

@@ -1,25 +1,25 @@
 "use client";
 
-import { ADMIN_PERMISSION } from "@/lib/rbac/constants";
-import type { TPermission } from "@/lib/rbac/schema";
-import { api } from "@/trpc/react";
-import type { RouterOutputs } from "@/trpc/shared";
 import { RiMore2Fill } from "@remixicon/react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
-  type SortingState,
-  type VisibilityState,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type SortingState,
   useReactTable,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ADMIN_PERMISSION } from "@/lib/rbac/constants";
+import type { TPermission } from "@/lib/rbac/schema";
+import { api } from "@/trpc/react";
+import type { RouterOutputs } from "@/trpc/shared";
 import { pushModal } from "../modals";
 import { defaultInputPermissionInputs } from "../modals/role-create-update-modal";
 import { Badge } from "../ui/badge";
@@ -187,7 +187,6 @@ function getPermission(permissions_: TPermission[]) {
     if (permissions?.[permission.subject]) {
       for (const action of permission.actions) {
         if (permissions?.[permission.subject]?.[action] !== undefined) {
-          // @ts-expect-error
           permissions[permission.subject][action] = true;
         }
       }

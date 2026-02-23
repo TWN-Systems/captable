@@ -7,20 +7,16 @@
  * need to use are documented accordingly near the end.
  */
 
-import { TRPCError, initTRPC } from "@trpc/server";
+import * as Sentry from "@sentry/nextjs";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-
 import { isSentryEnabled } from "@/constants/sentry";
 import { getIp, getUserAgent } from "@/lib/headers";
-import { RBAC, type addPolicyOption } from "@/lib/rbac";
-import {
-  checkAccessControlMembership,
-  getPermissions,
-} from "@/lib/rbac/access-control";
+import { type addPolicyOption, RBAC } from "@/lib/rbac";
+import { getPermissions } from "@/lib/rbac/access-control";
 import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
-import * as Sentry from "@sentry/nextjs";
 
 interface Meta {
   policies: addPolicyOption;
@@ -156,6 +152,7 @@ const t = initTRPC
  * @see https://trpc.io/docs/router
  */
 export const createTRPCRouter = t.router;
+export const createCallerFactory = t.createCallerFactory;
 
 const sentryMiddleware = t.middleware(
   Sentry.trpcMiddleware({
@@ -177,14 +174,6 @@ const enforceAuthMiddleware = t.middleware(({ ctx: ctx_, next }) => {
   });
 });
 
-const pipedSentryMiddleware = sentryMiddleware.unstable_pipe(
-  enforceAuthMiddleware,
-);
-
-const authMiddleware = isSentryEnabled
-  ? pipedSentryMiddleware
-  : enforceAuthMiddleware;
-
 /**
  * Public (unauthenticated) procedure
  *
@@ -202,14 +191,24 @@ export const withoutAuth = t.procedure;
  *
  * @see https://trpc.io/docs/procedures
  */
-export const withAuth = t.procedure.use(authMiddleware);
+export const withAuth = isSentryEnabled
+  ? t.procedure.use(sentryMiddleware).use(enforceAuthMiddleware)
+  : t.procedure.use(enforceAuthMiddleware);
 
-export const withAccessControl = t.procedure.use(
-  authMiddleware.unstable_pipe(async ({ ctx: ctx_, next, meta }) => {
-    const ctx = await withAccessControlTrpcContext({ ...ctx_, meta });
-
-    return next({
-      ctx,
+const accessControlMiddleware = t.middleware(
+  async ({ ctx: ctx_, next, meta }) => {
+    // ctx_ has been authenticated by enforceAuthMiddleware - cast to the correct type
+    const ctx = await withAccessControlTrpcContext({
+      ...(ctx_ as unknown as withAuthTrpcContextType),
+      meta,
     });
-  }),
+    return next({ ctx });
+  },
 );
+
+export const withAccessControl = isSentryEnabled
+  ? t.procedure
+      .use(sentryMiddleware)
+      .use(enforceAuthMiddleware)
+      .use(accessControlMiddleware)
+  : t.procedure.use(enforceAuthMiddleware).use(accessControlMiddleware);

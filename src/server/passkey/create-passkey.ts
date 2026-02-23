@@ -1,10 +1,10 @@
+import { verifyRegistrationResponse } from "@simplewebauthn/server";
+import type { RegistrationResponseJSON } from "@simplewebauthn/types";
 import { MAXIMUM_PASSKEYS } from "@/constants/passkey";
 import { getAuthenticatorOptions } from "@/lib/authenticator";
 import { CredentialDeviceTypeEnum } from "@/prisma/enums";
 import { db } from "@/server/db";
 import type { PasskeyAudit } from "@/trpc/routers/passkey-router/schema";
-import { verifyRegistrationResponse } from "@simplewebauthn/server";
-import type { RegistrationResponseJSON } from "@simplewebauthn/types";
 import { Audit } from "../audit";
 
 type CreatePasskeyOptions = {
@@ -76,13 +76,13 @@ export const createPasskey = async ({
     throw new Error("Verification failed");
   }
 
+  const { credential, credentialDeviceType, credentialBackedUp } =
+    verification.registrationInfo;
   const {
-    credentialPublicKey,
-    credentialID,
+    publicKey: credentialPublicKey,
+    id: credentialID,
     counter,
-    credentialDeviceType,
-    credentialBackedUp,
-  } = verification.registrationInfo;
+  } = credential;
 
   await db.$transaction(async (tx) => {
     const passkey = await tx.passkey.create({

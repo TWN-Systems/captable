@@ -1,4 +1,5 @@
-import { Button, type ButtonProps } from "@/components/ui/button";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -8,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { PricingPlanInterval } from "@/prisma/enums";
-import { useState } from "react";
 
 interface PricingCardProps {
   title: string;
@@ -17,7 +17,7 @@ interface PricingCardProps {
   interval: PricingPlanInterval;
   subscribedUnitAmount?: bigint | null;
   unitAmount: number;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: required for type compatibility
   handleClick?: () => Promise<any>;
   isSubmitting: boolean;
 }

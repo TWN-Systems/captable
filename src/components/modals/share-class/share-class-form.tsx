@@ -1,22 +1,23 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
-import {
-  ShareClassMutationSchema,
-  type ShareClassMutationType,
-} from "@/trpc/routers/share-class/schema";
-
 import {
   Select,
   SelectContent,
@@ -26,17 +27,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { api } from "@/trpc/react";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { popModal } from "..";
+  ShareClassMutationSchema,
+  type ShareClassMutationType,
+} from "@/trpc/routers/share-class/schema";
 import { type ComboBoxOption, LinearCombobox } from "../../ui/combobox";
+import { popModal } from "..";
 
 const formSchema = ShareClassMutationSchema;
 
@@ -118,18 +115,18 @@ const ShareClassForm = ({
       : await updateMutation.mutateAsync(values);
   };
 
+  const shareClassTypeOpts = [
+    { value: "COMMON", label: "Common share" },
+    { value: "PREFERRED", label: "Preferred share" },
+  ];
+
   useEffect(() => {
     setDefShareTypeOpt(
       shareClassTypeOpts.find(
         (opt) => opt.value === form.getValues().classType,
       ),
     );
-  }, [form.getValues]);
-
-  const shareClassTypeOpts = [
-    { value: "COMMON", label: "Common share" },
-    { value: "PREFERRED", label: "Preferred share" },
-  ];
+  }, [form.getValues, shareClassTypeOpts.find]);
 
   return (
     <Form {...form}>

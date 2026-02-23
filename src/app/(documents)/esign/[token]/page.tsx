@@ -1,23 +1,23 @@
+import type { Metadata } from "next";
 import EmptyState from "@/components/common/empty-state";
 import { PdfCanvas } from "@/components/template/pdf-canvas";
 import { SigningFields } from "@/components/template/signing-fields";
 import { TemplateSigningFieldProvider } from "@/providers/template-signing-field-provider";
 import { getServerComponentAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Document signing",
 };
 
 interface SigningPageProps {
-  params: {
+  params: Promise<{
     token: string;
-  };
+  }>;
 }
 
 export default async function SigningPage(props: SigningPageProps) {
-  const { token } = props.params;
+  const { token } = await props.params;
 
   const {
     fields,
@@ -26,7 +26,7 @@ export default async function SigningPage(props: SigningPageProps) {
     templateId,
     signableFields,
     status: templateStatus,
-  } = await api.template.getSigningFields.query({
+  } = await api.template.getSigningFields({
     token,
   });
 
