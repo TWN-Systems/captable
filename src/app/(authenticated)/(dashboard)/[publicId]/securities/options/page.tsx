@@ -1,10 +1,10 @@
+import { RiGroup2Fill } from "@remixicon/react";
+import type { Metadata } from "next";
 import EmptyState from "@/components/common/empty-state";
 import Tldr from "@/components/common/tldr";
 import OptionTable from "@/components/securities/options/option-table";
 import { Card } from "@/components/ui/card";
 import { api } from "@/trpc/server";
-import { RiGroup2Fill } from "@remixicon/react";
-import type { Metadata } from "next";
 import { IssueStockOptionButton } from "./issue-stock-option-button";
 
 export const metadata: Metadata = {
@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 };
 
 const OptionsPage = async () => {
-  const options = await api.securities.getOptions.query();
-  const stakeholders = await api.stakeholder.getStakeholders.query();
-  const equityPlans = await api.equityPlan.getPlans.query();
+  const options = await api.securities.getOptions();
+  const stakeholders = await api.stakeholder.getStakeholders();
+  const equityPlans = await api.equityPlan.getPlans();
 
   if (options?.data?.length === 0) {
     return (

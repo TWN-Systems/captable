@@ -1,9 +1,9 @@
-import EmptyState from "@/components/common/empty-state";
-import { api } from "@/trpc/server";
 import { RiTerminalBoxFill } from "@remixicon/react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
+import EmptyState from "@/components/common/empty-state";
+import { api } from "@/trpc/server";
 import CreateAccessToken from "./components/create-access-token";
 import AccessTokenTable from "./components/table";
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Developer settings",
 };
 const AccessTokenPage = async () => {
-  const data = await api.accessToken.listAll.query({
+  const data = await api.accessToken.listAll({
     typeEnum: "api",
   });
 

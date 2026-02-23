@@ -1,11 +1,11 @@
+import { RiAddFill, RiUploadCloudLine } from "@remixicon/react";
+import type { Metadata } from "next";
 import EmptyState from "@/components/common/empty-state";
 import { PageLayout } from "@/components/dashboard/page-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { withServerComponentSession } from "@/server/auth";
 import { api } from "@/trpc/server";
-import { RiAddFill, RiUploadCloudLine } from "@remixicon/react";
-import type { Metadata } from "next";
 import DocumentUploadModal from "../components/modal";
 import DocumentsTable from "../components/table";
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 const DocumentsPage = async () => {
-  const documents = await api.document.getAll.query();
+  const documents = await api.document.getAll();
   const session = await withServerComponentSession();
 
   if (documents.length === 0) {

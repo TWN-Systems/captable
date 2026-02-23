@@ -1,8 +1,7 @@
+import type { Metadata } from "next";
 import MemberTable from "@/components/member/member-table";
 import { Card } from "@/components/ui/card";
-
 import { api } from "@/trpc/server";
-import type { Metadata } from "next";
 import { AddTeamMemberDropdownMenu } from "./add-team-member-dropdown-menu";
 
 export const metadata: Metadata = {
@@ -11,8 +10,8 @@ export const metadata: Metadata = {
 
 const TeamMembersPage = async () => {
   const [members, roles] = await Promise.all([
-    api.member.getMembers.query(),
-    api.rbac.listRoles.query(),
+    api.member.getMembers(),
+    api.rbac.listRoles(),
   ]);
   return (
     <div className="flex flex-col gap-y-3">

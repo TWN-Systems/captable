@@ -1,7 +1,11 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import type { ComponentProps } from "react";
+import { useForm, useFormContext, useWatch } from "react-hook-form";
+import { toast } from "sonner";
 import Modal from "@/components/common/push-modal";
-
 import { ACTIONS, type TActions } from "@/lib/rbac/actions";
 import { SUBJECTS, type TSubjects } from "@/lib/rbac/subjects";
 import { api } from "@/trpc/react";
@@ -9,12 +13,6 @@ import {
   type TypeZodCreateRoleMutationSchema,
   ZodCreateRoleMutationSchema,
 } from "@/trpc/routers/rbac-router/schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import type { ComponentProps } from "react";
-import { useForm, useFormContext, useWatch } from "react-hook-form";
-import { toast } from "sonner";
-import { popModal, pushModal } from ".";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import {
@@ -34,26 +32,30 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { popModal, pushModal } from ".";
 
 const formSchema = ZodCreateRoleMutationSchema;
 type TFormSchema = TypeZodCreateRoleMutationSchema;
 
 export const defaultInputPermissionInputs = SUBJECTS.reduce<
   TFormSchema["permissions"]
->((prev, curr) => {
-  const actions = ACTIONS.reduce<Partial<Record<TActions, boolean>>>(
-    (prev, curr) => {
-      prev[curr] = false;
+>(
+  (prev, curr) => {
+    const actions = ACTIONS.reduce<Record<TActions, boolean>>(
+      (prev, curr) => {
+        prev[curr] = false;
 
-      return prev;
-    },
-    {},
-  );
+        return prev;
+      },
+      {} as Record<TActions, boolean>,
+    );
 
-  prev[curr] = actions;
+    prev[curr] = actions;
 
-  return prev;
-}, {});
+    return prev;
+  },
+  {} as TFormSchema["permissions"],
+);
 
 const humanizedAction: Record<TActions, string> = {
   "*": "All",

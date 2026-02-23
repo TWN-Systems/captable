@@ -12,12 +12,10 @@ export const ShareClassMutationSchema = z.object({
     message: "Authorized shares is required",
   }),
   boardApprovalDate: z.coerce.date({
-    required_error: "Board approval date is required",
-    invalid_type_error: "This is not a valid date",
+    message: "Board approval date is required",
   }),
   stockholderApprovalDate: z.coerce.date({
-    required_error: "Stockholder approval date is required",
-    invalid_type_error: "This is not a valid date",
+    message: "Stockholder approval date is required",
   }),
   votesPerShare: z.coerce.number().min(0, {
     message: "Votes per share is required",

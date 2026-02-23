@@ -3,6 +3,7 @@
 
 "use client";
 
+import { useFormContext } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -19,10 +20,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SignaturePad } from "@/components/ui/signature-pad";
-
-import { type TemplateSigningFieldForm } from "@/providers/template-signing-field-provider";
-import { type RouterOutputs } from "@/trpc/shared";
-import { useFormContext } from "react-hook-form";
+import type { TemplateSigningFieldForm } from "@/providers/template-signing-field-provider";
+import type { RouterOutputs } from "@/trpc/shared";
 
 type Field = RouterOutputs["template"]["getSigningFields"]["fields"][number];
 
@@ -131,13 +130,11 @@ export function FieldRenderer({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {meta &&
-                    meta?.options &&
-                    meta.options.map((item) => (
-                      <SelectItem key={item.id} value={item.id}>
-                        {item.value}
-                      </SelectItem>
-                    ))}
+                  {meta?.options?.map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      {item.value}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />

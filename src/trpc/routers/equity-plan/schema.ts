@@ -7,8 +7,7 @@ export const EquityPlanMutationSchema = z.object({
     message: "Name is required",
   }),
   boardApprovalDate: z.coerce.date({
-    required_error: "Board approval date is required",
-    invalid_type_error: "This is not a valid date",
+    message: "Board approval date is required",
   }),
   planEffectiveDate: z.coerce.date().optional().nullable(),
   initialSharesReserved: z.coerce.number().min(1, {

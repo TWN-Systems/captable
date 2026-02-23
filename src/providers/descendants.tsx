@@ -1,13 +1,13 @@
 // CREDITS https://github.com/reach/reach-ui/blob/dev/packages/descendants/src/reach-descendants.tsx
 
+import * as React from "react";
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/unbound-method */
 import { useForceUpdate } from "@/hooks/use-force-update";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@/hooks/use-isomorphic-layout-effect";
-import * as React from "react";
 
-// biome-ignore lint/suspicious/noEmptyBlockStatements: <explanation>
+// biome-ignore lint/suspicious/noEmptyBlockStatements: intentional noop
 export function noop(): void {}
 
 function createDescendantContext<DescendantType extends Descendant>(
@@ -126,7 +126,7 @@ function DescendantProvider<DescendantType extends Descendant>({
     // We can safely ignore the lint warning here because it will not change
     // between renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [set],
   );
 
   return (
@@ -178,7 +178,7 @@ function findDOMIndex<DescendantType extends Descendant>(
  * @returns A copy of the array with the item inserted at the specified index
  */
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: required for type compatibility
 function insertAt<T extends any[]>(
   array: T,
   item: T[number],

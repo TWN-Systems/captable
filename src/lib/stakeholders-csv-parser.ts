@@ -1,12 +1,12 @@
-import { ZodAddStakeholderMutationSchema } from "@/trpc/routers/stakeholder-router/schema";
 import Papa, { type ParseResult } from "papaparse";
 import { ZodError } from "zod";
+import { ZodAddStakeholderMutationSchema } from "@/trpc/routers/stakeholder-router/schema";
 
-export const parseStrakeholdersCSV = async (csvFile: File) => {
+export const parseStrakeholdersCSV = (csvFile: File) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
-    reader.onload = function (event) {
+    reader.onload = (event) => {
       const csvData = event.target?.result as string;
       const parsed: ParseResult<string[]> = Papa.parse(csvData, {
         skipEmptyLines: true,
@@ -27,6 +27,7 @@ export const parseStrakeholdersCSV = async (csvFile: File) => {
         "zipcode",
       ];
 
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: early return is intentional for rejection
       const mappedCSV = parsed.data.map((csv) => {
         const values = csv.map((value, index) => {
           value = value.trim();
@@ -38,7 +39,7 @@ export const parseStrakeholdersCSV = async (csvFile: File) => {
           return value;
         });
 
-        if (values.length != keys.length) {
+        if (values.length !== keys.length) {
           reject(
             new Error(
               `Invalid values, Please make sure you have ${keys.length} values. You can put "" (empty string) for the optional fields.`,
@@ -59,6 +60,7 @@ export const parseStrakeholdersCSV = async (csvFile: File) => {
         return filtered;
       });
 
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: forEach return is intentional pattern
       mappedCSV.forEach((csv) => {
         try {
           ZodAddStakeholderMutationSchema.parse(csv);
@@ -72,7 +74,7 @@ export const parseStrakeholdersCSV = async (csvFile: File) => {
       resolve(mappedCSV);
     };
 
-    reader.onerror = function () {
+    reader.onerror = () => {
       reject(new Error("Error reading the file"));
     };
 

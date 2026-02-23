@@ -1,5 +1,5 @@
 import { getPresignedGetUrl } from "@/server/file-uploads";
-import { withAccessControl, withAuth } from "@/trpc/api/trpc";
+import { withAccessControl } from "@/trpc/api/trpc";
 import { ZodGetDocumentQuerySchema } from "../schema";
 
 export const getDocumentProcedure = withAccessControl

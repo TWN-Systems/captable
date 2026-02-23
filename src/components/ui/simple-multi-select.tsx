@@ -1,5 +1,17 @@
 "use client";
 
+import { RiCheckLine, RiCloseLine } from "@remixicon/react";
+import { Command as CommandPrimitive } from "cmdk";
+// import { X as RemoveIcon, Ri } from "lucide-react";
+import type React from "react";
+import {
+  createContext,
+  forwardRef,
+  type KeyboardEvent,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 import { Badge } from "@/components/ui/badge";
 import {
   Command,
@@ -8,17 +20,6 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import { RiCheckLine, RiCloseLine } from "@remixicon/react";
-import { Command as CommandPrimitive } from "cmdk";
-// import { X as RemoveIcon, Ri } from "lucide-react";
-import React, {
-  KeyboardEvent,
-  createContext,
-  forwardRef,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
 
 type MultiSelectorProps = {
   values: string[];
@@ -28,6 +29,7 @@ type MultiSelectorProps = {
 
 interface MultiSelectContextProps {
   value: string[];
+  // biome-ignore lint/suspicious/noExplicitAny: legacy interface definition
   onValueChange: (value: any) => void;
   open: boolean;
   setOpen: (value: boolean) => void;
@@ -72,7 +74,7 @@ const MultiSelector = ({
         }
       }
     },
-    [value],
+    [value, onValueChange],
   );
 
   // TODO : change from else if use to switch case statement
@@ -125,7 +127,7 @@ const MultiSelector = ({
         }
       }
     },
-    [value, inputValue, activeIndex, loop],
+    [value, inputValue, activeIndex, loop, dir, onValueChange],
   );
 
   return (

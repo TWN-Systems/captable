@@ -1,7 +1,7 @@
 "use client";
 
-import { getStripeClient } from "@/client-only/stripe";
-
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,8 +12,6 @@ import type { PricingPlanInterval, PricingType } from "@/prisma/enums";
 import { api } from "@/trpc/react";
 import type { TypeZodStripePortalMutationSchema } from "@/trpc/routers/billing-router/schema";
 import type { RouterOutputs } from "@/trpc/shared";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { EmptyPlans } from "./empty-plans";
 import { PricingButton } from "./pricing-button";
 import { PricingCard } from "./pricing-card";
@@ -44,15 +42,14 @@ function Plans({ products, subscription }: PricingProps) {
   const [billingInterval, setBillingInterval] =
     useState<PricingPlanInterval>("month");
 
-  const { mutateAsync: checkoutWithStripe, isLoading: checkoutLoading } =
+  const { mutateAsync: checkoutWithStripe, isPending: checkoutLoading } =
     api.billing.checkout.useMutation({
-      onSuccess: async ({ stripeSessionId }) => {
-        const stripe = await getStripeClient();
-        await stripe?.redirectToCheckout({ sessionId: stripeSessionId });
+      onSuccess: ({ stripeSessionUrl }) => {
+        window.location.href = stripeSessionUrl;
       },
     });
 
-  const { mutateAsync: stripePortal, isLoading: stripePortalLoading } =
+  const { mutateAsync: stripePortal, isPending: stripePortalLoading } =
     api.billing.stripePortal.useMutation({
       onSuccess: ({ url }) => {
         router.push(url);

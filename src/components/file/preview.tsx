@@ -1,9 +1,9 @@
+import { RiFileUnknowFill as UnknownFileIcon } from "@remixicon/react";
 import EmptyState from "@/components/common/empty-state";
 import { OfficeViewer } from "@/components/file/office-viewer";
 import { Button } from "@/components/ui/button";
 import { PdfViewer } from "@/components/ui/pdf-viewer";
 import { fileType } from "@/lib/mime";
-import { RiFileUnknowFill as UnknownFileIcon } from "@remixicon/react";
 
 type FilePreviewProps = {
   name: string;
@@ -12,12 +12,13 @@ type FilePreviewProps = {
 };
 
 const ImagePreview = ({ url, name }: FilePreviewProps) => {
+  // biome-ignore lint/performance/noImgElement: direct img tag needed for dynamic file preview
   return <img className="rounded" src={url} alt={name} />;
 };
 
-const AuditPreview = ({ url, name, mimeType }: FilePreviewProps) => {
+const AuditPreview = ({ url, name: _name, mimeType }: FilePreviewProps) => {
   return (
-    // biome-ignore lint/a11y/useMediaCaption: <explanation>
+    // biome-ignore lint/a11y/useMediaCaption: captions not available
     <audio controls className="w-full">
       <source src={url} type={mimeType} />
       Your browser does not support the audio element.
@@ -25,9 +26,9 @@ const AuditPreview = ({ url, name, mimeType }: FilePreviewProps) => {
   );
 };
 
-const VideoPreview = ({ url, name, mimeType }: FilePreviewProps) => {
+const VideoPreview = ({ url, name: _name, mimeType }: FilePreviewProps) => {
   return (
-    // biome-ignore lint/a11y/useMediaCaption: <explanation>
+    // biome-ignore lint/a11y/useMediaCaption: captions not available
     <video controls className="w-full rounded">
       <source src={url} type={mimeType} />
       Your browser does not support the video type.

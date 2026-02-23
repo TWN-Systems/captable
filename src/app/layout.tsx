@@ -8,10 +8,10 @@ import { ProgressBarProvider } from "@/providers/progress-bar";
 import { getServerComponentAuthSession } from "@/server/auth";
 import { robotoMono, satoshi } from "@/styles/fonts";
 import "@/styles/globals.css";
-import { TRPCReactProvider } from "@/trpc/react";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
+import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
   title: {
@@ -30,6 +30,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerComponentAuthSession();
+  const cookieStore = await cookies();
   const nodeEnv = process.env.NODE_ENV;
 
   return (
@@ -40,7 +41,7 @@ export default async function RootLayout({
       <body className="min-h-screen">
         <ProgressBarProvider>
           <NextAuthProvider session={session}>
-            <TRPCReactProvider cookies={cookies().toString()}>
+            <TRPCReactProvider cookies={cookieStore.toString()}>
               <main>{children}</main>
               <Toaster richColors />
               {nodeEnv === "development" && <ScreenSize />}

@@ -1,8 +1,7 @@
-import { createTRPCRouter, withAuth } from "@/trpc/api/trpc";
-import { ShareClassMutationSchema } from "./schema";
-
 import { Audit } from "@/server/audit";
 import { checkMembership } from "@/server/auth";
+import { createTRPCRouter, withAuth } from "@/trpc/api/trpc";
+import { ShareClassMutationSchema } from "./schema";
 
 export const shareClassRouter = createTRPCRouter({
   create: withAuth

@@ -1,15 +1,15 @@
 "use client";
 
-import { invariant } from "@/lib/error";
 import { useResizeObserver } from "@wojtekmaj/react-hooks";
 import {
-  type ReactNode,
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useState,
 } from "react";
 import { Document, type DocumentProps, Page, pdfjs } from "react-pdf";
+import { invariant } from "@/lib/error";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 
@@ -66,7 +66,7 @@ export const PdfViewer = ({
         options={options}
         className="w-full overflow-hidden rounded"
       >
-        {Array.from(new Array(numPages), (el, index) => (
+        {Array.from(new Array(numPages), (_el, index) => (
           <Page
             key={`page_${index + 1}`}
             pageNumber={index + 1}

@@ -1,11 +1,11 @@
 "use client";
 
-import type { TemplateFieldForm } from "@/providers/template-field-provider";
-import type { RouterOutputs } from "@/trpc/shared";
 import { useResizeObserver } from "@wojtekmaj/react-hooks";
 import { nanoid } from "nanoid";
 import { useCallback, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import type { TemplateFieldForm } from "@/providers/template-field-provider";
+import type { RouterOutputs } from "@/trpc/shared";
 import { DrawingField } from "./drawing-field";
 import { TemplateField } from "./template-field";
 
@@ -48,6 +48,7 @@ export function FieldCanvas({ recipients, pageNumber }: FieldCanvasProp) {
 
   return (
     <>
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: canvas requires mouse events for field placement */}
       <div
         ref={setContainerRef}
         className="absolute bottom-0 left-0 right-0 top-0 z-10 cursor-crosshair"

@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { toPng } from "html-to-image";
+import { forwardRef, type MouseEvent, useRef, useState } from "react";
 import { mergeRefs } from "@/lib/dom";
 import { cn } from "@/lib/utils";
-import { toPng } from "html-to-image";
-import { type MouseEvent, forwardRef, useRef, useState } from "react";
 
 interface Point {
   x: number;
@@ -14,8 +14,10 @@ interface Point {
 const Drawing = forwardRef<SVGSVGElement, { lines: [Point][] }>(
   ({ lines }, ref) => {
     return (
+      // biome-ignore lint/a11y/noSvgWithoutTitle: decorative signature drawing canvas
       <svg ref={ref} className="h-full w-full">
         {lines.map((line, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: drawing lines have no stable key
           <DrawingLine key={index} line={line} />
         ))}
       </svg>
@@ -89,12 +91,14 @@ export const SignaturePad = forwardRef<HTMLDivElement, SignaturePadProps>(
     if (prefilledValue) {
       return (
         <div ref={ref} className="h-64 w-full cursor-not-allowed border">
+          {/* biome-ignore lint/performance/noImgElement: signature preview requires img */}
           <img src={prefilledValue} alt="signature" />
         </div>
       );
     }
 
     return (
+      // biome-ignore lint/a11y/noStaticElementInteractions: signature canvas requires mouse events on div
       <div
         className={cn(
           "h-64 w-full border",

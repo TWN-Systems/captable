@@ -1,8 +1,8 @@
 "use client";
 
-import Kbd from "@/components/ui/kbd";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
+import Kbd from "@/components/ui/kbd";
 
 import { cn } from "@/lib/utils";
 

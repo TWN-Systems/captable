@@ -1,13 +1,13 @@
 "use client";
 
-import { Form } from "@/components/ui/form";
-import { COLORS } from "@/constants/esign";
-import { FieldTypes, TemplateStatus } from "@/prisma/enums";
-import type { RouterOutputs } from "@/trpc/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Form } from "@/components/ui/form";
+import { COLORS } from "@/constants/esign";
+import { FieldTypes, TemplateStatus } from "@/prisma/enums";
+import type { RouterOutputs } from "@/trpc/shared";
 
 type Field = RouterOutputs["template"]["get"]["fields"][number];
 type recipients = RouterOutputs["template"]["get"]["recipients"][number];
@@ -50,7 +50,7 @@ const formSchema = z.object({
     )
     .nonempty(),
   recipient: z.string(),
-  recipientColors: z.record(z.string()),
+  recipientColors: z.record(z.string(), z.string()),
   message: z.string().optional(),
 });
 

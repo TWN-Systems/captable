@@ -1,22 +1,23 @@
+import { RiAddFill, RiMailSendLine } from "@remixicon/react";
+import type { Metadata } from "next";
+import Link from "next/link";
 import EmptyState from "@/components/common/empty-state";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import UpdateTable from "@/components/update/update-table";
 import { api } from "@/trpc/server";
-import { RiAddFill, RiMailSendLine } from "@remixicon/react";
-import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Updates",
 };
 
 const UpdatesPage = async ({
-  params: { publicId },
+  params,
 }: {
-  params: { publicId: string };
+  params: Promise<{ publicId: string }>;
 }) => {
-  const updates = await api.update.get.query();
+  const { publicId } = await params;
+  const updates = await api.update.get();
 
   if (updates.data.length === 0) {
     return (

@@ -1,12 +1,12 @@
-import { ZodInviteMemberMutationSchema } from "@/trpc/routers/member-router/schema";
 import Papa, { type ParseResult } from "papaparse";
 import { ZodError } from "zod";
+import { ZodInviteMemberMutationSchema } from "@/trpc/routers/member-router/schema";
 
-export const parseInviteMembersCSV = async (csvFile: File) => {
+export const parseInviteMembersCSV = (csvFile: File) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
-    reader.onload = function (event) {
+    reader.onload = (event) => {
       const csvData = event.target?.result as string;
       const parsed: ParseResult<string[]> = Papa.parse(csvData, {
         skipEmptyLines: true,
@@ -15,13 +15,14 @@ export const parseInviteMembersCSV = async (csvFile: File) => {
 
       const keys = ["name", "email", "title"];
 
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: early return is intentional for rejection
       const mappedCSV = parsed.data.map((csv) => {
         const values = csv.map((value) => {
           value = value.trim();
           return value;
         });
 
-        if (values.length != keys.length) {
+        if (values.length !== keys.length) {
           reject(
             new Error(
               `Invalid values, Please make sure you have ${keys.length} values. You can put "" (empty string) for the optional fields.`,
@@ -42,6 +43,7 @@ export const parseInviteMembersCSV = async (csvFile: File) => {
         return filtered;
       });
 
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: forEach return is intentional pattern
       mappedCSV.forEach((csv) => {
         try {
           ZodInviteMemberMutationSchema.parse(csv);
@@ -55,7 +57,7 @@ export const parseInviteMembersCSV = async (csvFile: File) => {
       resolve(mappedCSV);
     };
 
-    reader.onerror = function () {
+    reader.onerror = () => {
       reject(new Error("Error reading the file"));
     };
 

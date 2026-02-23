@@ -1,30 +1,33 @@
 "use server";
 
-import FilePreview from "@/components/file/preview";
-import { SharePageLayout } from "@/components/share/page-layout";
-import { type JWTVerifyResult, decode } from "@/lib/jwt";
-import { db } from "@/server/db";
-import { getPresignedGetUrl } from "@/server/file-uploads";
 import { RiFolder3Fill as FolderIcon } from "@remixicon/react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import FilePreview from "@/components/file/preview";
+import { SharePageLayout } from "@/components/share/page-layout";
+import { decode, type JWTVerifyResult } from "@/lib/jwt";
+import { db } from "@/server/db";
+import { getPresignedGetUrl } from "@/server/file-uploads";
 
 const DataRoomPage = async ({
-  params: { publicId, bucketId },
-  searchParams: { token },
+  params,
+  searchParams,
 }: {
-  params: { publicId: string; bucketId: string };
-  searchParams: { token: string };
+  params: Promise<{ publicId: string; bucketId: string }>;
+  searchParams: Promise<{ token: string }>;
 }) => {
+  const { publicId, bucketId } = await params;
+  const { token } = await searchParams;
   let decodedToken: JWTVerifyResult | null = null;
 
   try {
     decodedToken = await decode(token);
-  } catch (error) {
+  } catch (_error) {
     return notFound();
   }
 
-  const { companyId, dataRoomId, recipientId } = decodedToken?.payload;
+  if (!decodedToken) return notFound();
+  const { companyId, dataRoomId, recipientId } = decodedToken.payload;
   if (!companyId || !recipientId || !dataRoomId) {
     return notFound();
   }

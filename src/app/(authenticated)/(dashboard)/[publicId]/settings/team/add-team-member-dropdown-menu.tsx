@@ -1,5 +1,6 @@
 "use client";
 
+import { RiAccountCircleFill, RiAddLine } from "@remixicon/react";
 import MemberBulkImportModal from "@/components/member/member-bulk-import-modal";
 import { pushModal } from "@/components/modals";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { RouterOutputs } from "@/trpc/shared";
-import { RiAccountCircleFill, RiAddLine } from "@remixicon/react";
 
 type Roles = RouterOutputs["rbac"]["listRoles"]["rolesList"];
 
@@ -50,10 +50,8 @@ export const AddTeamMemberDropdownMenu = ({
                 });
               }}
             >
-              <>
-                <RiAccountCircleFill className="mr-2 h-4 w-4" />
-                Invite a team member
-              </>
+              <RiAccountCircleFill className="mr-2 h-4 w-4" />
+              Invite a team member
             </Button>
           </li>
 

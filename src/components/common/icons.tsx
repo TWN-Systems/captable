@@ -1,4 +1,5 @@
 import { cn } from "../../lib/utils";
+
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const SpinnerIcon = (props: IconProps) => {
@@ -13,8 +14,11 @@ export const SpinnerIcon = (props: IconProps) => {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      role="img"
+      aria-label="Loading"
       {...props}
     >
+      <title>Loading</title>
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
     </svg>
   );
@@ -25,6 +29,7 @@ export const UserAvatarIcon = (props: IconProps) => {
 
   return (
     <svg
+      aria-hidden="true"
       className={className}
       width="200"
       height="200"
@@ -46,6 +51,7 @@ export const CompanyLogoIcon = (props: IconProps) => {
 
   return (
     <svg
+      aria-hidden="true"
       className={className}
       width="200"
       height="200"
@@ -67,6 +73,7 @@ export const LogoIcon = (props: IconProps) => {
 
   return (
     <svg
+      aria-hidden="true"
       className={cn(className)}
       width="800"
       height="800"
@@ -97,6 +104,7 @@ export const SignatureIcon = (props: IconProps) => {
   const { className } = props;
   return (
     <svg
+      aria-hidden="true"
       className={cn(className)}
       fill="currentColor"
       width="80px"
@@ -113,6 +121,7 @@ export const ArrowRight = (props: IconProps) => {
   const { className } = props;
   return (
     <svg
+      aria-hidden="true"
       className={cn(className)}
       width="15px"
       height="15px"

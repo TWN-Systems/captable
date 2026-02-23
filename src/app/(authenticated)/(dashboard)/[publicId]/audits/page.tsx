@@ -1,9 +1,9 @@
+import type { Metadata } from "next";
 import { AuditTable } from "@/components/audit/audit-table";
 import { Card } from "@/components/ui/card";
 import { UnAuthorizedState } from "@/components/ui/un-authorized-state";
 import { serverAccessControl } from "@/lib/rbac/access-control";
 import { api } from "@/trpc/server";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Audits",
@@ -18,7 +18,7 @@ const AuditsPage = async () => {
     return <UnAuthorizedState />;
   }
 
-  const audits = await api.audit.getAudits.query({});
+  const audits = await api.audit.getAudits({});
   return (
     <div className="flex flex-col gap-y-3">
       <div className="flex items-center justify-between gap-y-3 ">

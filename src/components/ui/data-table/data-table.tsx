@@ -1,6 +1,5 @@
-import { type ReactNode, createContext, useContext } from "react";
-
-import { type Table } from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
+import { createContext, type ReactNode, useContext } from "react";
 
 interface DataTableRootProps<TData> {
   children: ReactNode;
@@ -11,7 +10,7 @@ interface TDataTableContext<TData> {
   table: Table<TData>;
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: required for type compatibility
 const dataTableContext = createContext<TDataTableContext<any> | null>(null);
 
 export const useDataTable = () => {
